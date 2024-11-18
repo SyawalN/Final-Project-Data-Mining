@@ -1,0 +1,43 @@
+:root {
+    /* header styles rules */
+    --header-background-color: rgb(253, 201, 134);
+    --header-font-size-title: 24px;
+}
+
+#header {
+    height: 80px;
+    padding: 0px 20px;
+    display: flex;
+    align-items: center;
+    border: 1px solid black;
+    background-color: var(--header-background-color);
+    animation: headerFadeIn 1s ease-in-out;
+}
+@keyframes headerFadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+#header > span {
+    font-size: var(--header-font-size-title);
+    font-family: var(--font-family-inter);
+    font-weight: 700;
+    opacity: 0;
+    transform: translateY(-100%);
+    animation: headerTitleFlyIn 1s ease-out forwards;
+    animation-delay: 1s;
+}
+@keyframes headerTitleFlyIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

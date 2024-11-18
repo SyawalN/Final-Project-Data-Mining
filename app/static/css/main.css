@@ -1,0 +1,21 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat:700,400|Inter:700,400");
+
+:root {
+    --font-family-montserrat: "Montserrat", Helvetica;
+    --font-family-inter: "Inter", Helvetica;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* Prevent FOUC - Non-supported javascript */
+html {
+    visibility: visible;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background-color: antiquewhite;
+}
