@@ -8,3 +8,9 @@ __pycache__/
 # ignore ipynb metadata and checkpoints
 .ipynb_checkpoints
 */.ipynb_checkpoints/*
+
+# ignore private datasets
+*.csv
+
+# ignore local test dir
+model/
