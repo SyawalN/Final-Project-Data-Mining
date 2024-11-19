@@ -1,0 +1,2 @@
+*.ipynb filter=strip_kernel_metadata
+.ipynb_checkpoints
