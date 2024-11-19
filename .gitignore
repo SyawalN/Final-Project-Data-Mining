@@ -4,3 +4,7 @@ venv/
 # ignore python bytecode
 __pycache__/
 *.py[cod]
+
+# ignore ipynb metadata and checkpoints
+.ipynb_checkpoints
+*/.ipynb_checkpoints/*

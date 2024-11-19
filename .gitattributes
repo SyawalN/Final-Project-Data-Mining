@@ -1,2 +1,4 @@
 *.ipynb filter=strip_kernel_metadata
-.ipynb_checkpoints
+
+*.zpln filter=nbstripout
+*.ipynb diff=ipynb
