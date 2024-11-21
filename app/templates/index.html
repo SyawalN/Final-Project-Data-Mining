@@ -12,9 +12,59 @@
     <div id="header">
         <span>Book Recommendation System Using Apriori Algorithm</span>
     </div>
+    <div>
+        <form id="search-form" method="POST">
+            <input type="text" id="search-term" placeholder="Ketik disini untuk mencari buku..." required>
+            <button type="submit">Search</button>
+        </form>
+    </div>
     <script>
         const links = new Links(['main', 'index']);
         links.generate();
+
+        document.getElementById('search-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const searchTerm = document.getElementById('search-term').value;
+
+            fetch('/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: new URLSearchParams({ 'search_term': searchTerm })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log("Res: ", data);
+            })
+            .catch(error => {
+                console.error("Error fetching data", error);
+            });
+
+            // // template
+            // .then(data => {
+            //     // Clear previous results
+            //     document.getElementById('results-container').innerHTML = '';
+            //     document.getElementById('recommended-books-container').innerHTML = '';
+
+            //     // Display search results dynamically
+            //     data.results.forEach(book => {
+            //         const bookElement = document.createElement('div');
+            //         bookElement.classList.add('book-item');
+            //         bookElement.innerHTML = `<h3>${book.judul_buku}</h3><p>by ${book.pengarang}</p>`;
+            //         document.getElementById('results-container').appendChild(bookElement);
+            //     });
+
+            //     // Display recommended books dynamically
+            //     data.recommended_books.forEach(book => {
+            //         const recommendedElement = document.createElement('div');
+            //         recommendedElement.classList.add('book-item');
+            //         recommendedElement.innerHTML = `<h3>${book.judul_buku}</h3><p>by ${book.pengarang}</p><p>Support: ${book.support}</p><p>Confidence: ${book.confidence}</p><p>Lift: ${book.lift}</p>`;
+            //         document.getElementById('recommended-books-container').appendChild(recommendedElement);
+            //     });
+            // });
+        });
     </script>
 </body>
 </html>
