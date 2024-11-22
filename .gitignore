@@ -16,3 +16,4 @@ __pycache__/
 
 # ignore local test dir
 model/
+.vercel
