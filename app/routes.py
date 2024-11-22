@@ -1,6 +1,5 @@
 from flask import Blueprint, render_template, jsonify, request
 from app.utils.data_filter import search_books
-import json
 
 bp = Blueprint('main', __name__)
 

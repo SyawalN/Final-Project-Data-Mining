@@ -20,7 +20,8 @@ class Links {
     #getSource(value) {
         const src = {
             main  : 'static/css/main.css',
-            index : 'static/css/index.css'
+            index : 'static/css/index.css',
+            icon_books: 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=library_books',
         }
 
         return src[value];
