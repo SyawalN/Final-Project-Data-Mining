@@ -4,6 +4,10 @@
     --header-font-size-title: 24px;
 }
 
+body {
+    overflow-y: auto;
+}
+
 #header-container {
     height: 80px;
     padding: 0px 20px;
@@ -43,13 +47,11 @@
 }
 
 #main-container {
-    border: solid red;
-    padding: 60px 20px 20px;
+    padding: 20px 20px 20px;
 }
 
 #main-container > #content {
-    height: 620px;
-    border: solid goldenrod;
+    padding-top: 20px;
 }
 
 #content {
@@ -60,6 +62,10 @@
 #content > #search-form {
     display: flex;
     justify-content: center;
+}
+#search-form button:first-child {
+    margin-left: -93px;
+    margin-right: 13px;
 }
 #search-form input {
     width: 300px;
@@ -82,20 +88,20 @@
     justify-content: center;
     align-items: center;
 }
+#search-form #search-btn:hover {
+    background-color: #e0dfdf;
+    cursor: pointer;
+    user-select: none;
+}
 #search-btn img {
     height: 15px;
+    -webkit-user-drag: none;
 }
 
 #content > #item-container {
-    width: 800px;
-    height: 527px;
+    width: 1300px;
     padding: 20px;
     margin: 20px auto;
-    border: solid salmon;
-    display: flex;
-    flex-flow: row wrap;
-    gap: 16px;
-    overflow-y: auto;
 }
 #item-container::-webkit-scrollbar {
     width: 8px;
@@ -112,8 +118,22 @@
 .item-card {
     --item-card-border-color: rgb(210, 195, 175);
 }
-#item-container .item-card {
-    width: calc(50% - 8px);
+.item-section {
+    width: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    gap: 16px;
+}
+.item-section:not(:last-child) {
+    margin-bottom: 40px;
+}
+.item-section span.section-title {
+    width: 100%;
+    font-size: 20px;
+    font-family: var(--font-family-inter);
+}
+.item-section .item-card {
+    width: calc((100% - 16px) / 2);
     height: 150px;
     padding: 10px;
     background-color: rgb(248, 236, 220);
@@ -124,12 +144,34 @@
     display: flex;
 }
 .item-card .item-img {
-    font-size: 100px;
+    width: 120px;
+    color: rgb(205, 165, 108);
+    font-size: 80px;
     border: 1px solid var(--item-card-border-color);
     border-radius: 8px;
     display: flex;
     align-items: center;
+    justify-content: center;
+    cursor: zoom-in;
+    user-select: none;
 }
 .item-card .item-information {
+    width: 100%;
     padding: 10px;
+}
+.item-information .book-name, .item-information .book-author {
+    line-height: 22px;
+    display: block;
+    font-family: var(--font-family-inter);
+}
+.item-information .book-name {
+    min-height: 37px;
+    max-height: 66px;
+    margin-bottom: 10px;
+    font-weight: 700;
+    display: block;
+}
+.item-information .book-author {
+    display: block;
+    font-size: 14px;
 }

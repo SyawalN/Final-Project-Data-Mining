@@ -1,11 +1,20 @@
 from flask import Blueprint, render_template, jsonify, request
-from app.utils.data_filter import search_books
+from app.utils.data_filter import search_books, most_borrowedBooks
 
 bp = Blueprint('main', __name__)
 
 @bp.route('/')
-def index() -> str:
+def index():
     return render_template('index.html')
+
+@bp.route('/api/data')
+def api_data():
+    most_borrowed_books = most_borrowedBooks(10)
+    return jsonify({
+        'status': 200,
+        'message': "Berhasil mengambil data", 
+        'data': most_borrowed_books
+    })
 
 @bp.route('/search', methods=['POST'])
 def search():

@@ -9,7 +9,7 @@ frequent_itemsets_path = os.path.join(os.getcwd(), 'app/data/frequent_itemsets.c
 def check_filepath(filepaths):
     for idx, filepath in enumerate(filepaths):
         if (os.path.exists(filepath) == False):
-            print(f'Invalid data or filepath not found:\n   {frequent_itemsets_path}\n')
+            print(f'Invalid data or filepath not found:\n   {filepath}\n')
             exit()
 
 # Check association_rules and frequent_itemsets filepath

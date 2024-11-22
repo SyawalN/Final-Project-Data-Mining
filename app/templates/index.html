@@ -15,12 +15,40 @@
     <div id="main-container">
         <div id="content">
             <form id="search-form" method="POST" autocomplete="off">
+                <!-- <button title="Clear Search">Clear Search</button> -->
                 <input type="text" id="search-term" placeholder="Cari buku..." required>
                 <button type="submit" id="search-btn" title="Search">
                     <img src="static/assets/images/icon_search.png" alt="search-icon">
                 </button>
             </form>
-            <div id="item-container"></div>
+            <div id="item-container">
+                
+                <!-- <div class="item-section">
+                    <span class="section-title">Recommended books:</span>
+                    <div class="item-card">
+                        <span class="item-img material-symbols-outlined">library_books</span>
+                        <div class="item-information">
+                            <span class="book-name">${book.judul_buku}</span>
+                            <span class="book-author">${book.pengarang}</span>
+                        </div>
+                    </div>
+                    <div class="item-card">
+                        <span class="item-img material-symbols-outlined">library_books</span>
+                        <div class="item-information">
+                            <span class="book-name">${book.judul_buku}</span>
+                            <span class="book-author">${book.pengarang}</span>
+                        </div>
+                    </div>
+                    <div class="item-card">
+                        <span class="item-img material-symbols-outlined">library_books</span>
+                        <div class="item-information">
+                            <span class="book-name">${book.judul_buku}</span>
+                            <span class="book-author">${book.pengarang}</span>
+                        </div>
+                    </div>
+                </div> -->
+
+            </div>
         </div>
     </div>
     <script>
@@ -31,6 +59,72 @@
         ]);
         links.generate();
 
+        // Item Container
+        const itemContainer = document.getElementById('item-container');
+
+        // Most borrowed books - MBB (ketika search-input kosong)
+        const itemSection_MBB = Object.assign(
+            document.createElement('div'),
+            { className: 'item-section', id: 'most-borrowed-section' }
+        );
+        const sectionTitle_MBB = Object.assign(
+            document.createElement('span'),
+            { className: 'section-title', innerHTML: 'Most Borrowed Books', style: 'text-align:center' }
+        )
+        itemSection_MBB.appendChild(sectionTitle_MBB);
+
+        // Result books - RSB (hasil pencarian dari input pencarian)
+        const itemSection_RSB = Object.assign(
+            document.createElement('div'),
+            { className: 'item-section', id: 'result-books' }
+        )
+        const sectionTitle_RSB = Object.assign(
+            document.createElement('span'),
+            { className: 'section-title', innerHTML: 'Result Books:' }
+        )
+        itemSection_RSB.appendChild(sectionTitle_RSB)
+
+        // Recommend books - RB (rekomendasi yang berkaitan dengan hasil pencarian)
+        const itemSection_RB = Object.assign(
+            document.createElement('div'),
+            { className: 'item-section', id: 'recommended-books' }
+        )
+        const sectionTitle_RB = Object.assign(
+            document.createElement('span'),
+            { className: 'section-title', innerHTML: 'Recommended Books:' }
+        )
+        itemSection_RB.appendChild(sectionTitle_RB);
+
+        fetch('/api/data')
+            .then(response => response.json())
+            .then((e) => {
+                
+                e.data.forEach((book) => {
+                    // Item Card
+                    const itemCard  = Object.assign(document.createElement('div'), { className: 'item-card' });
+                    const itemImage = Object.assign(document.createElement('span'), { className: 'item-img material-symbols-outlined', innerHTML: 'library_books' })
+                    // Item Information
+                    const itemInfo = Object.assign(document.createElement('div'), {
+                        className: 'item-information'
+                    });
+                    const bookName = Object.assign(document.createElement('span'), {
+                        className: 'book-name',
+                        innerHTML: `${book['judul_buku']}`
+                    });
+                    const bookAuthor = Object.assign(document.createElement('span'), {
+                        className: 'book-author',
+                        innerHTML: `Pengarang: ${book['pengarang']}`
+                    });
+                    itemInfo.append(bookName, bookAuthor);
+                    itemCard.append(itemImage, itemInfo);
+                    itemSection_MBB.appendChild(itemCard);
+                });
+                itemContainer.appendChild(itemSection_MBB)
+                console.clear()
+                console.log(itemSection_MBB)
+            });
+
+        // SEARCHING-EVENT-HANDLER
         document.getElementById('search-form').addEventListener('submit', function(event) {
             event.preventDefault();
 
@@ -44,54 +138,61 @@
                 body: new URLSearchParams({ 'search_term': searchTerm })
             })
             .then(response => response.json())
-            .then(data => {
-                const itemContainer = document.getElementById('item-container');
+            .then(e => {
                 itemContainer.innerHTML = "";
-                data.recommended_books.forEach((book) => {
-                    let item = `
-                    <div class="item-card">
-                        <span class="item-img material-symbols-outlined">library_books</span>
-                        <div class="item-information">
-                            <span class="book-name">${book.judul_buku}</span>
-                            <span class="book-author">${book.pengarang}</span>
-                        </div>
-                    </div>
-                    `
-                    itemContainer.innerHTML += item;
-                });
+                console.clear()
 
-                console.clear();
-                console.log(
-                    'Results: ', data['results'],
-                    '\nRecommended_books: ', data['recommended_books'],
-                );
+                // RESULTS
+                e.results.forEach((book) => {
+                    // Item Card
+                    const itemCard  = Object.assign(document.createElement('div'), { className: 'item-card' });
+                    const itemImage = Object.assign(document.createElement('span'), { className: 'item-img material-symbols-outlined', innerHTML: 'library_books' })
+                    // Item Information
+                    const itemInfo = Object.assign(document.createElement('div'), {
+                        className: 'item-information'
+                    });
+                    const bookName = Object.assign(document.createElement('span'), {
+                        className: 'book-name',
+                        innerHTML: `${book['judul_buku']}`
+                    });
+                    const bookAuthor = Object.assign(document.createElement('span'), {
+                        className: 'book-author',
+                        innerHTML: `Pengarang: ${book['pengarang']}`
+                    });
+                    itemInfo.append(bookName, bookAuthor);
+                    itemCard.append(itemImage, itemInfo);
+                    itemSection_RSB.appendChild(itemCard);
+                });
+                itemContainer.appendChild(itemSection_RSB)
+                console.log(itemSection_RSB)
+
+                // RECOMMENDED
+                e.recommended_books.forEach((book) => {
+                    // Item Card
+                    const itemCard  = Object.assign(document.createElement('div'), { className: 'item-card' });
+                    const itemImage = Object.assign(document.createElement('span'), { className: 'item-img material-symbols-outlined', innerHTML: 'library_books' })
+                    // Item Information
+                    const itemInfo = Object.assign(document.createElement('div'), {
+                        className: 'item-information'
+                    });
+                    const bookName = Object.assign(document.createElement('span'), {
+                        className: 'book-name',
+                        innerHTML: `${book['judul_buku']}`
+                    });
+                    const bookAuthor = Object.assign(document.createElement('span'), {
+                        className: 'book-author',
+                        innerHTML: `Pengarang: ${book['pengarang']}`
+                    });
+                    itemInfo.append(bookName, bookAuthor);
+                    itemCard.append(itemImage, itemInfo);
+                    itemSection_RB.appendChild(itemCard);
+                });
+                itemContainer.appendChild(itemSection_RB)
+                console.log(itemSection_RB)
             })
             .catch(error => {
                 console.error("Error fetching data", error);
             });
-
-            // // template
-            // .then(data => {
-            //     // Clear previous results
-            //     document.getElementById('results-container').innerHTML = '';
-            //     document.getElementById('recommended-books-container').innerHTML = '';
-
-            //     // Display search results dynamically
-            //     data.results.forEach(book => {
-            //         const bookElement = document.createElement('div');
-            //         bookElement.classList.add('book-item');
-            //         bookElement.innerHTML = `<h3>${book.judul_buku}</h3><p>by ${book.pengarang}</p>`;
-            //         document.getElementById('results-container').appendChild(bookElement);
-            //     });
-
-            //     // Display recommended books dynamically
-            //     data.recommended_books.forEach(book => {
-            //         const recommendedElement = document.createElement('div');
-            //         recommendedElement.classList.add('book-item');
-            //         recommendedElement.innerHTML = `<h3>${book.judul_buku}</h3><p>by ${book.pengarang}</p><p>Support: ${book.support}</p><p>Confidence: ${book.confidence}</p><p>Lift: ${book.lift}</p>`;
-            //         document.getElementById('recommended-books-container').appendChild(recommendedElement);
-            //     });
-            // });
         });
     </script>
 </body>

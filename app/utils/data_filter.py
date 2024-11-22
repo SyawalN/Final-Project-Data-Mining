@@ -26,6 +26,7 @@ def search_books(search_term: str):
     # sorts data in recommendtaions by support and confidence
     recommendations = recommendations.sort_values(by=['support', 'confidence'], ascending=[False, False])
 
+    print(recommendations)
     # Generating recommended books list
     # create a list for recommended books
     recommended_books = []
@@ -45,3 +46,16 @@ def search_books(search_term: str):
 
     return results, recommended_books
 
+def most_borrowedBooks(count):
+    most_borrowed_df = frequent_itemsets[frequent_itemsets['support'] > 0].sort_values(by=['support'], ascending=[False])
+    most_borrowed_df = most_borrowed_df.head(10)
+    most_borrowed_books = []
+    for _, row in most_borrowed_df.iterrows():
+        for book in row['itemsets']:
+            most_borrowed_books.append({
+                **extract_title_and_author(book),
+                "support": row['support']
+            })
+    print(type(most_borrowed_books))
+
+    return most_borrowed_books
