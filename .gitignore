@@ -12,7 +12,7 @@ __pycache__/
 */.ipynb_checkpoints/*
 
 # ignore private datasets
-*.csv
+transaksi_buku_clean.csv
 
 # ignore local test dir
 model/
