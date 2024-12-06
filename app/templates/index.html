@@ -189,7 +189,7 @@
                 itemSection_RB.replaceChildren();
                 itemSection_RB.appendChild(sectionLine());
                 if (e.recommended_books.length > 0) {
-                    e.recommended_books.forEach((book) => {
+                    e.recommended_books.forEach((book, idx) => {
                         // Item Card
                         const itemCard  = Object.assign(document.createElement('div'), { className: 'item-card' });
                         itemCard.style.animation = 'FadeIn 0.5s ease-out forwards';

@@ -121,12 +121,14 @@ body {
 }
 
 #main-container > #content > #item-container {
-    min-height: 500px;
+    min-width: 48.281rem;
+    min-height: 31.25rem;
     padding: 20px 37.5px;
     margin: 20px auto;
     background-color: rgb(245, 248, 250);
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
     border-radius: 12px;
+    opacity: 0;
     animation: FadeIn 1.5s ease-out forwards;
 }
 #main-container > #content hr {
