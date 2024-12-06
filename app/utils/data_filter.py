@@ -11,7 +11,7 @@ def search_books(search_term: str):
     for _, row in frequent_itemsets.iterrows():
         # check each book in itemsets column of each row
         for book in row['itemsets']:
-            if search_term in book.lower():
+            if search_term in extract_title_and_author(book.lower())['judul_buku']:
                 matching_books.add(book)
 
     results = []
@@ -26,7 +26,7 @@ def search_books(search_term: str):
     # sorts data in recommendtaions by support and confidence
     recommendations = recommendations.sort_values(by=['support', 'confidence'], ascending=[False, False])
 
-    print(recommendations)
+    # print(recommendations)
     # Generating recommended books list
     # create a list for recommended books
     recommended_books = []
