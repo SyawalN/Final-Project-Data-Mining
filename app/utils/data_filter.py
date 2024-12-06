@@ -27,6 +27,7 @@ def search_books(search_term: str):
     recommendations = recommendations.sort_values(by=['support', 'confidence'], ascending=[False, False])
 
     # print(recommendations)
+    
     # Generating recommended books list
     # create a list for recommended books
     recommended_books = []

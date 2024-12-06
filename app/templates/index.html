@@ -139,10 +139,11 @@
             })
             .then(response => response.json())
             .then(e => {
-                itemContainer.innerHTML = "";
+                itemContainer.replaceChildren();
                 console.clear()
 
                 // RESULTS
+                itemSection_RSB.replaceChildren();
                 e.results.forEach((book) => {
                     // Item Card
                     const itemCard  = Object.assign(document.createElement('div'), { className: 'item-card' });
@@ -167,6 +168,7 @@
                 console.log(itemSection_RSB)
 
                 // RECOMMENDED
+                itemSection_RB.replaceChildren();
                 e.recommended_books.forEach((book) => {
                     // Item Card
                     const itemCard  = Object.assign(document.createElement('div'), { className: 'item-card' });
