@@ -6,7 +6,7 @@
     <script src="static/js/linkLoader.js"></script>
     <title>Index</title>
     <!-- Prevent FOUC -->
-    <style>html{visibility: hidden;}</style>
+    <style>body{visibility: hidden;}</style>
 </head>
 <body>
     <div id="header-container">
@@ -15,40 +15,13 @@
     <div id="main-container">
         <div id="content">
             <form id="search-form" method="POST" autocomplete="off">
-                <!-- <button title="Clear Search">Clear Search</button> -->
-                <input type="text" id="search-term" placeholder="Cari buku..." required>
+                <button id="clear-search-btn" title="Hapus kata kunci pencarian" type="button">Clear Search</button>
+                <input type="text" id="search-term" placeholder="Cari buku...">
                 <button type="submit" id="search-btn" title="Search">
                     <img src="static/assets/images/icon_search.png" alt="search-icon">
                 </button>
             </form>
-            <div id="item-container">
-                
-                <!-- <div class="item-section">
-                    <span class="section-title">Recommended books:</span>
-                    <div class="item-card">
-                        <span class="item-img material-symbols-outlined">library_books</span>
-                        <div class="item-information">
-                            <span class="book-name">${book.judul_buku}</span>
-                            <span class="book-author">${book.pengarang}</span>
-                        </div>
-                    </div>
-                    <div class="item-card">
-                        <span class="item-img material-symbols-outlined">library_books</span>
-                        <div class="item-information">
-                            <span class="book-name">${book.judul_buku}</span>
-                            <span class="book-author">${book.pengarang}</span>
-                        </div>
-                    </div>
-                    <div class="item-card">
-                        <span class="item-img material-symbols-outlined">library_books</span>
-                        <div class="item-information">
-                            <span class="book-name">${book.judul_buku}</span>
-                            <span class="book-author">${book.pengarang}</span>
-                        </div>
-                    </div>
-                </div> -->
-
-            </div>
+            <div id="item-container"></div>
         </div>
     </div>
     <script>
@@ -58,10 +31,29 @@
             'icon_books'
         ]);
         links.generate();
+        generateRecommendedBooks();
+
+        // Debug console
+        let debugMode = false;
+        const debug = (func, value = '') => {
+            if (!debugMode) return;
+            if (func && typeof func) value.length == 0 ? func() : func(`Debug Mode (On) =>`, value);
+            else console.warn("Warning: Calling a non function property on debug mode");
+        }
 
         // Item Container
         const itemContainer = document.getElementById('item-container');
         const sectionLine = () => {return document.createElement('hr')};
+        
+        // Search Related
+        const searchInput = document.getElementById('search-term');
+        const clearSearchBtn = document.getElementById('clear-search-btn');
+        clearSearchBtn.addEventListener('click', function() {
+            searchInput.value = '';
+            itemContainer.replaceChildren();
+            generateRecommendedBooks();
+            clearSearchBtn.classList.remove('show');
+        });
 
         // Most borrowed books - MBB (ketika search-input kosong)
         const itemSection_MBB = Object.assign(document.createElement('div'), {
@@ -95,40 +87,53 @@
             innerHTML: 'Recommended Books:',
         });
 
-        fetch('/api/data')
-            .then(response => response.json())
-            .then((e) => {
-                
-                e.data.forEach((book) => {
-                    // Item Card
-                    const itemCard  = Object.assign(document.createElement('div'), { className: 'item-card' });
-                    const itemImage = Object.assign(document.createElement('span'), { className: 'item-img material-symbols-outlined', innerHTML: 'library_books' })
-                    // Item Information
-                    const itemInfo = Object.assign(document.createElement('div'), {
-                        className: 'item-information'
+        function generateRecommendedBooks() {
+            fetch('/api/data')
+                .then(response => response.json())
+                .then((e) => {
+                    
+                    e.data.forEach((book, idx) => {
+                        // Item Card
+                        const itemCard  = Object.assign(document.createElement('div'), { className: 'item-card' });
+                        itemCard.style.animation = 'FadeIn 0.5s ease-out forwards';
+                        itemCard.style.animationDelay = `${idx*0.1}s`;
+                        const itemImage = Object.assign(document.createElement('span'), { className: 'item-img material-symbols-outlined', innerHTML: 'library_books' })
+                        // Item Information
+                        const itemInfo = Object.assign(document.createElement('div'), {
+                            className: 'item-information'
+                        });
+                        const bookName = Object.assign(document.createElement('span'), {
+                            className: 'book-name',
+                            innerHTML: `${book['judul_buku']}`,
+                        });
+                        const bookAuthor = Object.assign(document.createElement('span'), {
+                            className: 'book-author',
+                            innerHTML: `Pengarang: ${book['pengarang']}`
+                        });
+                        itemInfo.append(bookName, bookAuthor);
+                        itemCard.append(itemImage, itemInfo);
+                        itemSection_MBB.appendChild(itemCard);
                     });
-                    const bookName = Object.assign(document.createElement('span'), {
-                        className: 'book-name',
-                        innerHTML: `${book['judul_buku']}`
-                    });
-                    const bookAuthor = Object.assign(document.createElement('span'), {
-                        className: 'book-author',
-                        innerHTML: `Pengarang: ${book['pengarang']}`
-                    });
-                    itemInfo.append(bookName, bookAuthor);
-                    itemCard.append(itemImage, itemInfo);
-                    itemSection_MBB.appendChild(itemCard);
+                    itemContainer.appendChild(itemSection_MBB)
+                    console.clear()
+                    console.log(itemSection_MBB)
                 });
-                itemContainer.appendChild(itemSection_MBB)
-                console.clear()
-                console.log(itemSection_MBB)
-            });
+        }
 
         // SEARCHING-EVENT-HANDLER
         document.getElementById('search-form').addEventListener('submit', function(event) {
             event.preventDefault();
 
-            const searchTerm = document.getElementById('search-term').value;
+            const searchTerm = searchInput.value;
+            if (searchTerm.trim().length > 0) {
+                clearSearchBtn.classList.add('show');
+                debug(console.log, searchTerm);
+            }
+            else {
+                clearSearchBtn.classList.remove('show');
+                clearSearchBtn.dispatchEvent(new Event('click'));
+                return;
+            }
 
             fetch('/search', {
                 method: 'POST',
@@ -139,16 +144,18 @@
             })
             .then(response => response.json())
             .then(e => {
+                // Delete all child element
                 itemContainer.replaceChildren();
-                console.clear()
 
                 // RESULTS
                 itemSection_RSB.replaceChildren();
                 itemSection_RSB.appendChild(sectionLine());
                 if (e.results.length > 0) {
-                    e.results.forEach((book) => {
+                    e.results.forEach((book, idx) => {
                         // Item Card
                         const itemCard  = Object.assign(document.createElement('div'), { className: 'item-card' });
+                        itemCard.style.animation = 'FadeIn 0.5s ease-out forwards';
+                        itemCard.style.animationDelay = `${idx*0.1}s`;
                         const itemImage = Object.assign(document.createElement('span'), { className: 'item-img material-symbols-outlined', innerHTML: 'library_books' })
                         // Item Information
                         const itemInfo = Object.assign(document.createElement('div'), {
@@ -176,7 +183,7 @@
                 }
                 itemSection_RSB.insertAdjacentElement('afterbegin', sectionTitle_RSB)
                 itemContainer.appendChild(itemSection_RSB)
-                console.log(itemSection_RSB)
+                debug(console.log, itemSection_RSB);
 
                 // RECOMMENDED
                 itemSection_RB.replaceChildren();
@@ -185,6 +192,8 @@
                     e.recommended_books.forEach((book) => {
                         // Item Card
                         const itemCard  = Object.assign(document.createElement('div'), { className: 'item-card' });
+                        itemCard.style.animation = 'FadeIn 0.5s ease-out forwards';
+                        itemCard.style.animationDelay = `${idx*0.1}s`;
                         const itemImage = Object.assign(document.createElement('span'), { className: 'item-img material-symbols-outlined', innerHTML: 'library_books' })
                         // Item Information
                         const itemInfo = Object.assign(document.createElement('div'), {
@@ -212,12 +221,16 @@
                 }
                 itemSection_RB.insertAdjacentElement('afterbegin', sectionTitle_RB);
                 itemContainer.appendChild(itemSection_RB)
-                console.log(itemSection_RB)
+                debug(console.log, itemSection_RB);
             })
             .catch(error => {
                 console.error("Error fetching data", error);
             });
         });
+
+        window.onload = () => {
+            document.body.style.visibility = 'visible';
+        };
     </script>
 </body>
 </html>

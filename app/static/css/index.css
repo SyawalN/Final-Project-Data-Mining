@@ -1,11 +1,21 @@
 :root {
     /* header styles rules */
-    --header-background-color: rgb(253, 201, 134);
+    --header-background-color: #222e3c;
     --header-font-size-title: 24px;
+    --item-card-border-color: #E1E3EA;
+}
+
+@keyframes FadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
 }
 
 body {
-    overflow-y: auto;
+    overflow-y: scroll;
 }
 
 #header-container {
@@ -14,16 +24,9 @@ body {
     display: flex;
     align-items: center;
     border: 1px solid black;
+    color: white;
     background-color: var(--header-background-color);
-    animation: headerFadeIn 0.5s ease-in;
-}
-@keyframes headerFadeIn {
-    0% {
-        opacity: 0;
-    }
-    100% {
-        opacity: 1;
-    }
+    animation: FadeIn 0.5s ease-in forwards;
 }
 
 #header-container > span {
@@ -52,6 +55,7 @@ body {
 
 #main-container > #content {
     padding-top: 20px;
+    position: relative;
 }
 
 #content {
@@ -62,10 +66,25 @@ body {
 #content > #search-form {
     display: flex;
     justify-content: center;
+    opacity: 0;
+    animation: FadeIn 0.5s ease-out forwards;
+    animation-delay: 0.5s;
 }
-#search-form button:first-child {
-    margin-left: -93px;
-    margin-right: 13px;
+#content > #search-form > button#clear-search-btn  {
+    border-radius: 6px;
+    margin-left: -108px;
+    margin-right: 15px;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+#content > #search-form > button#clear-search-btn:hover {
+    background-color: #e0dfdf;
+    cursor: pointer;
+}
+#content > #search-form > button#clear-search-btn.show {
+    visibility: visible;
+    opacity: 1;
 }
 #search-form input {
     width: 300px;
@@ -73,9 +92,12 @@ body {
     padding: 0 15px;
     border: 2px solid gray;
     border-right: none !important;
+    background-color: rgb(242, 243, 247);
     border-radius: 6px 0 0 6px;
+    transition: background-color 0.3s ease;
 }
 #search-form input:focus {
+    background-color: rgb(216, 227, 248);
     outline: none;
 }
 #search-form #search-btn {
@@ -99,9 +121,13 @@ body {
 }
 
 #main-container > #content > #item-container {
-    width: 1300px;
-    padding: 20px;
+    min-height: 500px;
+    padding: 20px 37.5px;
     margin: 20px auto;
+    background-color: rgb(245, 248, 250);
+    box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 12px;
+    animation: FadeIn 1.5s ease-out forwards;
 }
 #main-container > #content hr {
     width: 100%;
@@ -109,26 +135,12 @@ body {
     margin: 0;
     margin-bottom: 1rem;
 }
-#item-container::-webkit-scrollbar {
-    width: 8px;
-}
-#item-container::-webkit-scrollbar-track {
-    background-color: rgb(226, 212, 195);
-}
-#item-container::-webkit-scrollbar-thumb {
-    background-color: rgb(186, 159, 125);
-}
-#item-container::-webkit-scrollbar-thumb:hover {
-    background-color: rgb(160, 137, 108);
-}
-.item-card {
-    --item-card-border-color: rgb(210, 195, 175);
-}
 .item-section {
     width: 100%;
     display: flex;
     flex-flow: row wrap;
     gap: 16px;
+    animation: FadeIn 1s ease-out forwards;
 }
 .item-section:not(:last-child) {
     margin-bottom: 40px;
@@ -143,20 +155,22 @@ body {
     width: calc((100% - 16px) / 2);
     height: 150px;
     padding: 10px;
-    background-color: rgb(248, 236, 220);
+    background-color: rgb(245, 248, 250);
     border: 1px solid var(--item-card-border-color);
     box-shadow: 0 0 4px 0 rgba(0, 0, 0, 0.2);
     border-radius: 10px;
     position: relative;
     display: flex;
+    opacity: 0;
 }
 #main-container > #content > #item-container > .item-section > .msg-box {
     padding-left: 20px;
 }
 .item-card .item-img {
     width: 120px;
-    color: rgb(205, 165, 108);
+    color: #d3d4da;
     font-size: 80px;
+    background-color: #2e3d4f;
     border: 1px solid var(--item-card-border-color);
     border-radius: 8px;
     display: flex;
