@@ -61,39 +61,39 @@
 
         // Item Container
         const itemContainer = document.getElementById('item-container');
+        const sectionLine = () => {return document.createElement('hr')};
 
         // Most borrowed books - MBB (ketika search-input kosong)
-        const itemSection_MBB = Object.assign(
-            document.createElement('div'),
-            { className: 'item-section', id: 'most-borrowed-section' }
-        );
-        const sectionTitle_MBB = Object.assign(
-            document.createElement('span'),
-            { className: 'section-title', innerHTML: 'Most Borrowed Books', style: 'text-align:center' }
-        )
-        itemSection_MBB.appendChild(sectionTitle_MBB);
+        const itemSection_MBB = Object.assign(document.createElement('div'), {
+            className: 'item-section',
+            id: 'most-borrowed-section',
+        });
+        const sectionTitle_MBB = Object.assign(document.createElement('span'), {
+            className: 'section-title',
+            innerHTML: 'Most Borrowed Books',
+            style: 'text-align:center',
+        });
+        itemSection_MBB.append(sectionTitle_MBB, sectionLine());
 
         // Result books - RSB (hasil pencarian dari input pencarian)
-        const itemSection_RSB = Object.assign(
-            document.createElement('div'),
-            { className: 'item-section', id: 'result-books' }
-        )
-        const sectionTitle_RSB = Object.assign(
-            document.createElement('span'),
-            { className: 'section-title', innerHTML: 'Result Books:' }
-        )
-        itemSection_RSB.appendChild(sectionTitle_RSB)
+        const itemSection_RSB = Object.assign(document.createElement('div'), {
+            className: 'item-section',
+            id: 'result-books',
+        });
+        const sectionTitle_RSB = Object.assign(document.createElement('span'), {
+            className: 'section-title', 
+            innerHTML: 'Result Books:',
+        });
 
         // Recommend books - RB (rekomendasi yang berkaitan dengan hasil pencarian)
-        const itemSection_RB = Object.assign(
-            document.createElement('div'),
-            { className: 'item-section', id: 'recommended-books' }
-        )
-        const sectionTitle_RB = Object.assign(
-            document.createElement('span'),
-            { className: 'section-title', innerHTML: 'Recommended Books:' }
-        )
-        itemSection_RB.appendChild(sectionTitle_RB);
+        const itemSection_RB = Object.assign(document.createElement('div'), {
+            className: 'item-section',
+            id: 'recommended-books',
+        });
+        const sectionTitle_RB = Object.assign(document.createElement('span'), { 
+            className: 'section-title',
+            innerHTML: 'Recommended Books:',
+        });
 
         fetch('/api/data')
             .then(response => response.json())
@@ -144,51 +144,73 @@
 
                 // RESULTS
                 itemSection_RSB.replaceChildren();
-                e.results.forEach((book) => {
-                    // Item Card
-                    const itemCard  = Object.assign(document.createElement('div'), { className: 'item-card' });
-                    const itemImage = Object.assign(document.createElement('span'), { className: 'item-img material-symbols-outlined', innerHTML: 'library_books' })
-                    // Item Information
-                    const itemInfo = Object.assign(document.createElement('div'), {
-                        className: 'item-information'
+                itemSection_RSB.appendChild(sectionLine());
+                if (e.results.length > 0) {
+                    e.results.forEach((book) => {
+                        // Item Card
+                        const itemCard  = Object.assign(document.createElement('div'), { className: 'item-card' });
+                        const itemImage = Object.assign(document.createElement('span'), { className: 'item-img material-symbols-outlined', innerHTML: 'library_books' })
+                        // Item Information
+                        const itemInfo = Object.assign(document.createElement('div'), {
+                            className: 'item-information'
+                        });
+                        const bookName = Object.assign(document.createElement('span'), {
+                            className: 'book-name',
+                            innerHTML: `${book['judul_buku']}`
+                        });
+                        const bookAuthor = Object.assign(document.createElement('span'), {
+                            className: 'book-author',
+                            innerHTML: `Pengarang: ${book['pengarang']}`
+                        });
+                        itemInfo.append(bookName, bookAuthor);
+                        itemCard.append(itemImage, itemInfo);
+                        itemSection_RSB.appendChild(itemCard);
                     });
-                    const bookName = Object.assign(document.createElement('span'), {
-                        className: 'book-name',
-                        innerHTML: `${book['judul_buku']}`
+                } 
+                else {
+                    const msg = Object.assign(document.createElement('span'), {
+                        className: 'msg-box result-msg',
+                        innerHTML: `Pencarian dengan kata kunci '${searchTerm}' tidak ditemukan`,
                     });
-                    const bookAuthor = Object.assign(document.createElement('span'), {
-                        className: 'book-author',
-                        innerHTML: `Pengarang: ${book['pengarang']}`
-                    });
-                    itemInfo.append(bookName, bookAuthor);
-                    itemCard.append(itemImage, itemInfo);
-                    itemSection_RSB.appendChild(itemCard);
-                });
+                    itemSection_RSB.insertAdjacentElement('beforeend', msg);
+                }
+                itemSection_RSB.insertAdjacentElement('afterbegin', sectionTitle_RSB)
                 itemContainer.appendChild(itemSection_RSB)
                 console.log(itemSection_RSB)
 
                 // RECOMMENDED
                 itemSection_RB.replaceChildren();
-                e.recommended_books.forEach((book) => {
-                    // Item Card
-                    const itemCard  = Object.assign(document.createElement('div'), { className: 'item-card' });
-                    const itemImage = Object.assign(document.createElement('span'), { className: 'item-img material-symbols-outlined', innerHTML: 'library_books' })
-                    // Item Information
-                    const itemInfo = Object.assign(document.createElement('div'), {
-                        className: 'item-information'
+                itemSection_RB.appendChild(sectionLine());
+                if (e.recommended_books.length > 0) {
+                    e.recommended_books.forEach((book) => {
+                        // Item Card
+                        const itemCard  = Object.assign(document.createElement('div'), { className: 'item-card' });
+                        const itemImage = Object.assign(document.createElement('span'), { className: 'item-img material-symbols-outlined', innerHTML: 'library_books' })
+                        // Item Information
+                        const itemInfo = Object.assign(document.createElement('div'), {
+                            className: 'item-information'
+                        });
+                        const bookName = Object.assign(document.createElement('span'), {
+                            className: 'book-name',
+                            innerHTML: `${book['judul_buku']}`
+                        });
+                        const bookAuthor = Object.assign(document.createElement('span'), {
+                            className: 'book-author',
+                            innerHTML: `Pengarang: ${book['pengarang']}`
+                        });
+                        itemInfo.append(bookName, bookAuthor);
+                        itemCard.append(itemImage, itemInfo);
+                        itemSection_RB.appendChild(itemCard);
                     });
-                    const bookName = Object.assign(document.createElement('span'), {
-                        className: 'book-name',
-                        innerHTML: `${book['judul_buku']}`
+                }
+                else {
+                    const msg = Object.assign(document.createElement('span'), {
+                        className: 'msg-box recommended-msg',
+                        innerHTML: `Rekomendasi tidak ditemukan. Hasil pencarian buku diperlukan.`,
                     });
-                    const bookAuthor = Object.assign(document.createElement('span'), {
-                        className: 'book-author',
-                        innerHTML: `Pengarang: ${book['pengarang']}`
-                    });
-                    itemInfo.append(bookName, bookAuthor);
-                    itemCard.append(itemImage, itemInfo);
-                    itemSection_RB.appendChild(itemCard);
-                });
+                    itemSection_RB.insertAdjacentElement('beforeend', msg);
+                }
+                itemSection_RB.insertAdjacentElement('afterbegin', sectionTitle_RB);
                 itemContainer.appendChild(itemSection_RB)
                 console.log(itemSection_RB)
             })

@@ -98,10 +98,16 @@ body {
     -webkit-user-drag: none;
 }
 
-#content > #item-container {
+#main-container > #content > #item-container {
     width: 1300px;
     padding: 20px;
     margin: 20px auto;
+}
+#main-container > #content hr {
+    width: 100%;
+    border: 1px solid black;
+    margin: 0;
+    margin-bottom: 1rem;
 }
 #item-container::-webkit-scrollbar {
     width: 8px;
@@ -129,8 +135,9 @@ body {
 }
 .item-section span.section-title {
     width: 100%;
-    font-size: 20px;
-    font-family: var(--font-family-inter);
+    font-size: 24px;
+    font-family: var(--font-family-monstserrat);
+    font-weight: 700;
 }
 .item-section .item-card {
     width: calc((100% - 16px) / 2);
@@ -142,6 +149,9 @@ body {
     border-radius: 10px;
     position: relative;
     display: flex;
+}
+#main-container > #content > #item-container > .item-section > .msg-box {
+    padding-left: 20px;
 }
 .item-card .item-img {
     width: 120px;
